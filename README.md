@@ -54,6 +54,25 @@
 }
 ```
 * By default, the app will try to send email using SendGrid, if SendGrid is unavailable or returns non 200 HTTP status code, it will try to use MailGun
+* Sample successful response
+```json
+{
+    "success": true,
+    "httpStatus": null,
+    "message": null
+}
+```
+* Sample error response
+```json
+{
+    "timestamp": 1529635390783,
+    "status": 500,
+    "error": "Internal Server Error",
+    "exception": "org.springframework.web.client.HttpClientErrorException",
+    "message": "400 BAD REQUEST",
+    "path": "/email/send"
+}
+```
 
 ## Known issues
 * API keys are included in the repo, ideally it should be externalised into environment config files
