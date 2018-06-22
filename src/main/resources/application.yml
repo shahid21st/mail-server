@@ -1,0 +1,29 @@
+# MailGun properties
+mailgun.api.domain: sandbox0dd1452134574239b79c2dba690cc680.mailgun.org
+mailgun.api.messages.url: https://api.mailgun.net/v3/sandbox0dd1452134574239b79c2dba690cc680.mailgun.org/messages
+mailgun.api.username: api
+mailgun.api.password: 45b26adc09d4ea87ebded64cce69bf06-0470a1f7-a2e2d8dd
+
+# SendGrid properties
+sendgrid.api.key: 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
+sendgrid.api.url: https://api.sendgrid.com/v3/mail/send
+
+---
+# For aws environment deployment
+spring:
+    profiles: cloud
+    application:
+        name: mail-service
+server:
+  port: 9080
+
+---
+# For local environment deployment   
+
+spring:
+    profiles: local
+    application:
+        name: mail-service
+
+server:
+  port: 9080

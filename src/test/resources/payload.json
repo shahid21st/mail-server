@@ -1,0 +1,14 @@
+{
+  "to": [
+    {
+      "email": "shahid21st@gmail.com",
+      "name": "John Doe"
+    }
+  ],
+  "subject": "Hello, World!",
+  "from": {
+    "email": "sam.smith@example.com",
+    "name": "Sam Smith"
+  },
+  "body": "Sample Email body"
+}
