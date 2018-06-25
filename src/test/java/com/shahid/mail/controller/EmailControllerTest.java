@@ -16,6 +16,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -45,12 +46,10 @@ public class EmailControllerTest {
     private Resource file;
 
     @Mock
-    private
-    SendGridEmailService sendGridEmailService;
+    private SendGridEmailService sendGridEmailService;
 
     @Mock
-    private
-    MailGunEmailService mailGunEmailService;
+    private MailGunEmailService mailGunEmailService;
 
     private EmailController emailController;
 
@@ -61,14 +60,16 @@ public class EmailControllerTest {
 
     @Before
     public void setup() throws Exception {
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+        ReflectionTestUtils.setField(sendGridEmailService, "sendgridApiKey", System.getenv("SENDGRID_API_KEY"));
+        ReflectionTestUtils.setField(mailGunEmailService, "password", System.getenv("MAILGUN_API_PASSWORD"));
         emailController = new EmailController(sendGridEmailService, mailGunEmailService);
+        this.mockMvc = webAppContextSetup(webApplicationContext).build();
         ObjectMapper mapper = new ObjectMapper();
          payload = mapper.readValue(new String(Files.readAllBytes(Paths.get(file.getURI()))), Payload.class);
     }
 
     @Test
-    public void createArticle() throws Exception {
+    public void testEmailEndpoint() throws Exception {
         when(sendGridEmailService.send(any())).thenReturn(new StatusResponse(true));
 
         this.mockMvc.perform(post("/email/send")

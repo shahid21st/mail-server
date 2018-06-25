@@ -3,14 +3,16 @@
 * clone the repo
 * Go to the repo directory in shell
 * Run `mvn clean install`
-* Run `ava -jar -Dspring.profiles.active=local target/mail-service-0.0.18-SNAPSHOT.jar`
+* Use the separately supplied `mailProps.env` file and run `source mailProps.env`
+* Run `ava -jar -Dspring.profiles.active=local target/mail-service-0.0.20-SNAPSHOT.jar`
 * Run `mvn clean install docker:build docker:push -Ddocker.username=docker_username -Ddocker.password=docker_password` to push docker image to docker hub
 
 ## Local deployment with docker
 
 * [Install Docker](https://docs.docker.com/engine/installation/)
 * Run docker
-* Run `docker run -p 9080:9080 -e "SPRING_PROFILES_ACTIVE=local" shahid21st/mail-service:0.0.18-SNAPSHOT`
+* Use the separately supplied `mailPropsDocker.env` file
+* Run `docker run -p 9080:9080 -e "SPRING_PROFILES_ACTIVE=local" --env-file "mailPropsDocker.env" shahid21st/mail-service:0.0.18-SNAPSHOT`
 
 ## AWS deployment
 
@@ -18,7 +20,8 @@
 * Download the key file to ssh to the instance
 * Open up port 80 for outside traffic to the instance
 * ssh to the instance `ssh -i ec2-test.pem ec2-user@ec2-54-88-89-80.compute-1.amazonaws.com`
-* Run `docker run -p 80:9080 -e "SPRING_PROFILES_ACTIVE=cloud" shahid21st/mail-service:0.0.18-SNAPSHOT`
+* Copy or create a file similar to `mailPropsDocker.env` file
+* Run `docker run -p 80:9080 -e "SPRING_PROFILES_ACTIVE=cloud" --env-file "mailPropsDocker.env" shahid21st/mail-service:0.0.20-SNAPSHOT`
 
 ## How to use
 * Determine the app url 
@@ -29,8 +32,8 @@
 {  
    "to":[  
       {  
-         "email":"shahid21st@gmail.com",
-         "name":"Shahid Zaman"
+         "email":"emal@gmail.com",
+         "name":"Sample Name"
       }
    ],
    "cc":[  
@@ -75,7 +78,6 @@
 ```
 
 ## Known issues
-* API keys are included in the repo, ideally it should be externalised into environment config files
 * In the provided API contract/user input, only `To` field is validated 
 * Error reporting in case of non 200 status code is not extensive, but I think adequate in terms of error received from the mail service providers
 * Data loss possibility in case of both mail service providers are down as the logic only allows failover from primary to secondary but not vice-versa
